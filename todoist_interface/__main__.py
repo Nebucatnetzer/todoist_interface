@@ -24,4 +24,5 @@ if __name__ == '__main__':
     missing_tasks = utils.get_missing_tasks(tasks, issues)
     if missing_tasks:
         todoist.create_tasks(missing_tasks)
+        exit(0)
     print("Nothing new to add.")
