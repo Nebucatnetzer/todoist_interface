@@ -9,6 +9,6 @@ def get_missing_tasks(tasks, issues_to_check):
     for issue in issues_to_check:
         if issue["title"] not in [t["content"] for t in tasks]:
             missing_tasks.append({"content": issue["title"],
-                                  "url": issue["web_url"]})
+                                  "description": issue["web_url"]})
 
     return missing_tasks

@@ -1,5 +1,6 @@
 import requests
 import json
+import uuid
 
 
 class TodoistAPI:
@@ -13,18 +14,24 @@ class TodoistAPI:
         Returns all tasks from todoist
         """
         response = requests.get(
-            self.url + '/tasks',
+            self.url + 'tasks',
             headers={'Authorization': 'Bearer ' + self.token},
             params={"filter": filter})
         return response.json()
 
-    def add_tasks(self, tasks: list):
+    def create_tasks(self, tasks: list):
         """
         Adds tasks to todoist
         """
         for task in tasks:
-            requests.post(self.url + '/tasks',
-                          headers={'Authorization': 'Bearer ' + self.token},
+            requests.post(self.url + 'tasks',
+                          headers={
+                              "Content-Type": "application/json",
+                              "X-Request-Id": str(uuid.uuid4()),
+                              "Authorization": "Bearer "
+                              + self.token},
                           data=json.dumps({
                               "content": task["content"],
+                              "description": task["description"],
+                              "label_ids": [2158782094, ]
                           }))
