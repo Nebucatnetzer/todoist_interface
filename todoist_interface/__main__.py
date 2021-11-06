@@ -2,7 +2,6 @@ import settings
 from todoist import TodoistAPI
 from gitlab import GitlabAPI
 from mantishub import MantishubAPI
-from todoist_interface import mantishub
 import utils
 
 if __name__ == '__main__':
@@ -18,7 +17,9 @@ if __name__ == '__main__':
     mantishub = MantishubAPI(config["mantishub"]["token"])
 
     # Get the Todoist tasks
-    tasks = todoist.get_get_tasks_by_filter("@gitlab")
+    tasks = []
+    tasks.append(todoist.get_get_tasks_by_filter("@gitlab"))
+    tasks.append(todoist.get_get_tasks_by_filter("@mantis"))
 
     # Get the Gitlab issues
     gitlab_tasks = gitlab.get_issues()
