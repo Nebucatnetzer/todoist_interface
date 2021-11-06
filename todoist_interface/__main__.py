@@ -1,4 +1,3 @@
-import json
 import settings
 from todoist import TodoistAPI
 from gitlab import GitlabAPI
