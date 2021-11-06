@@ -15,7 +15,12 @@ class MantishubAPI:
         return self.convert_to_todoist(tickets)
 
     def convert_to_todoist(self, tickets):
-        for ticket in tickets:
-            print(ticket)
+        # TODO: add a function to convert mantis priority to todoist priority
+        # TODO: add a function to create the url
         tasks = []
+        for ticket in tickets:
+            url = "https:mantishub.com"
+            content = "[{title}]({url})".format(title=ticket["summary"],
+                                                url=url)
+            tasks.append({"content": content, "label_ids": [2158784659, ]})
         return tasks
