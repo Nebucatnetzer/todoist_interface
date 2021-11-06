@@ -2,9 +2,10 @@ import requests
 
 
 class GitlabAPI:
-    def __init__(self, url: str, token: str) -> None:
+    def __init__(self, url: str, token: str, assignee: str) -> None:
         self.url = url
         self.token = token
+        self.assignee = assignee
 
     def get_issues_by_assignee(self, assignee: str) -> list:
         """
@@ -22,3 +23,15 @@ class GitlabAPI:
         issues = response.json()
 
         return issues
+
+    def convert_to_todoist(issues):
+        tasks = []
+        for issue in issues:
+            content = "[{title}]({url})".format(title=issue["title"],
+                                                url=issue["web_url"])
+            tasks.append({"content": content})
+        return tasks
+
+    def get_issues(self) -> list:
+        issues = self.get_issues_by_assignee(self.assignee)
+        return self.convert_to_todoist(issues)

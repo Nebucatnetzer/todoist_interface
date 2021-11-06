@@ -1,6 +1,8 @@
 import settings
 from todoist import TodoistAPI
 from gitlab import GitlabAPI
+from mantishub import MantishubAPI
+from todoist_interface import mantishub
 import utils
 
 if __name__ == '__main__':
@@ -10,16 +12,21 @@ if __name__ == '__main__':
 
     # initialise Todoist and Gitlab
     todoist = TodoistAPI(config['todoist']['token'])
-    gitlab = GitlabAPI(config["gitlab"]["url"], config["gitlab"]["token"])
+    gitlab = GitlabAPI(config["gitlab"]["url"],
+                       config["gitlab"]["token"],
+                       config["gitlab"]["assignee"])
+    mantishub = MantishubAPI(config["mantishub"]["token"])
 
     # Get the Todoist tasks
     tasks = todoist.get_get_tasks_by_filter("@gitlab")
 
     # Get the Gitlab issues
-    issues = gitlab.get_issues_by_assignee("zweili")
+    gitlab_tasks = gitlab.get_issues()
+    mantishub_tasks = mantishub.get_tickets()
+    missing_tasks = []
+    missing_tasks.append(utils.get_missing_tasks(tasks, gitlab_tasks))
+    missing_tasks.append(utils.get_missing_tasks(tasks, mantishub_tasks))
 
-    # Create a list of issues that are not in Todoist
-    missing_tasks = utils.get_missing_tasks(tasks, issues)
     if missing_tasks:
         todoist.create_tasks(missing_tasks)
         exit(0)
