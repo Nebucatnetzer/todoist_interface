@@ -1,0 +1,6 @@
+gitlab:
+  url: "https://gitlab.example.com/api/v4/"
+  token: "gitlabtoken"
+
+todoist:
+  token: "todoisttoken"
