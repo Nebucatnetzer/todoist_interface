@@ -221,3 +221,5 @@ flycheck_*.el
 /network-security.data
 
 
+# todoist_interface
+todoist_interface.yml
