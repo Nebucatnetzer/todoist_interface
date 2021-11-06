@@ -1,6 +1,7 @@
 gitlab:
   url: "https://gitlab.example.com/api/v4/"
   token: "gitlabtoken"
+  assignee: "muster"
 
 todoist:
   token: "todoisttoken"
