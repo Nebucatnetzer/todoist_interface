@@ -1,4 +1,3 @@
-import pytest
 from todoist_interface.todoist import TodoistAPI
 
 
