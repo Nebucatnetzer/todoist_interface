@@ -29,7 +29,7 @@ class GitlabAPI:
         for issue in issues:
             content = "[{title}]({url})".format(title=issue["title"],
                                                 url=issue["web_url"])
-            tasks.append({"content": content})
+            tasks.append({"content": content, "label_ids": [2158782094, ]})
         return tasks
 
     def get_issues(self) -> list:

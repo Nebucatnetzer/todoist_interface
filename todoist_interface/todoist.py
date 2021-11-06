@@ -32,5 +32,5 @@ class TodoistAPI:
                               + self.token},
                           data=json.dumps({
                               "content": task["content"],
-                              "label_ids": [2158782094, ]
+                              "label_ids": task["label_ids"]
                           }))
