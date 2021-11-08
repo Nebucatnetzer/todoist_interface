@@ -24,7 +24,7 @@ class GitlabAPI:
 
         return issues
 
-    def convert_to_todoist(issues):
+    def convert_to_todoist(self, issues):
         tasks = []
         for issue in issues:
             content = "[{title}]({url})".format(title=issue["title"],
