@@ -1,0 +1,13 @@
+[run]
+source =
+     todoist_interface/
+omit =
+     *tests/*,
+     *venv/*,
+     */__init__.py,
+     */__main__.py,
+     setup.py,
+     dig_apis.py
+
+[tool:pytest]
+addopts = --cov=. --cov-report=html

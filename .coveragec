@@ -1,8 +1,0 @@
-[run]
-omit =
-     *tests/*,
-     *__init__.py,
-     *venv/*
-
-[tool:pytest]
-addopts = --cov-report html
