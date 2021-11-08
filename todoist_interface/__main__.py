@@ -11,27 +11,38 @@ if __name__ == '__main__':
 
     # initialise Todoist and Gitlab
     todoist = TodoistAPI(config['todoist']['token'])
-    gitlab = GitlabAPI(config["gitlab"]["url"],
-                       config["gitlab"]["token"],
-                       config["gitlab"]["assignee"])
-    mantishub = MantishubAPI(config["mantishub"]["token"])
 
-    # Get the Todoist tasks
+    # Setup the todoist tasks
     tasks = []
 
-    gitlab_labeled_tasks = todoist.get_get_tasks_by_filter("@gitlab")
-    if gitlab_labeled_tasks:
-        tasks.extend(gitlab_labeled_tasks)
-
-    mantis_labeled_tasks = todoist.get_get_tasks_by_filter("@mantis")
-    if mantis_labeled_tasks:
-        tasks.extend(mantis_labeled_tasks)
-
-    # Get the Gitlab issues
-    # gitlab_tasks = gitlab.get_issues()
+    # Gitlab
+    gitlab_labeled_tasks = []
     gitlab_tasks = []
+    if "gitlab" in config:
+        gitlab = GitlabAPI(config["gitlab"]["url"],
+                           config["gitlab"]["token"],
+                           config["gitlab"]["assignee"])
 
-    mantishub_tasks = mantishub.get_tickets()
+        # Get the Gitlab tasks
+        gitlab_tasks = gitlab.get_issues()
+        # Get the Todoist tasks labeled gitlab
+        gitlab_labeled_tasks = todoist.get_get_tasks_by_filter("@gitlab")
+        if gitlab_labeled_tasks:
+            tasks.extend(gitlab_labeled_tasks)
+
+    # Mantishub
+    mantis_labeled_tasks = []
+    mantishub_tasks = []
+    if "mantishub" in config:
+        mantishub = MantishubAPI(config["mantishub"]["token"])
+        # Get the Mantishub tasks
+        mantishub_tasks = mantishub.get_tickets()
+        # Get the Todoist tasks labeled mantishub
+        mantis_labeled_tasks = todoist.get_get_tasks_by_filter("@mantis")
+        if mantis_labeled_tasks:
+            tasks.extend(mantis_labeled_tasks)
+
+    # Check if there are any tasks to add to Todoist
     missing_tasks = []
     if gitlab_tasks:
         missing_tasks.extend(utils.get_missing_tasks(tasks, gitlab_tasks))
