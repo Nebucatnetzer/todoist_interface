@@ -18,15 +18,26 @@ if __name__ == '__main__':
 
     # Get the Todoist tasks
     tasks = []
-    tasks.append(todoist.get_get_tasks_by_filter("@gitlab"))
-    tasks.append(todoist.get_get_tasks_by_filter("@mantis"))
+
+    gitlab_labeled_tasks = todoist.get_get_tasks_by_filter("@gitlab")
+    if gitlab_labeled_tasks:
+        tasks.append(gitlab_labeled_tasks)
+
+    mantis_labeled_tasks = todoist.get_get_tasks_by_filter("@mantis")
+    if mantis_labeled_tasks:
+        tasks.append(mantis_labeled_tasks)
 
     # Get the Gitlab issues
-    gitlab_tasks = gitlab.get_issues()
+    # gitlab_tasks = gitlab.get_issues()
+    gitlab_tasks = []
+
     mantishub_tasks = mantishub.get_tickets()
     missing_tasks = []
-    missing_tasks.append(utils.get_missing_tasks(tasks, gitlab_tasks))
-    missing_tasks.append(utils.get_missing_tasks(tasks, mantishub_tasks))
+    if gitlab_tasks:
+        missing_tasks.append(utils.get_missing_tasks(tasks, gitlab_tasks))
+
+    if mantishub_tasks:
+        missing_tasks.append(utils.get_missing_tasks(tasks, mantishub_tasks))
 
     if missing_tasks:
         todoist.create_tasks(missing_tasks)

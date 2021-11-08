@@ -6,8 +6,11 @@ def get_missing_tasks(tasks, issues_to_check):
     :return: A list of tasks not in Todoist
     """
     missing_tasks = []
-    for issue in issues_to_check:
-        if issue["content"] not in [t["content"] for t in tasks]:
-            missing_tasks.append(issue)
+    if tasks:
+        for issue in issues_to_check:
+            if issue["content"] not in [t["content"] for t in tasks]:
+                missing_tasks.append(issue)
+    else:
+        missing_tasks = issues_to_check
 
     return missing_tasks
