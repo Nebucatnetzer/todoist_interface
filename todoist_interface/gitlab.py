@@ -16,10 +16,11 @@ class GitlabAPI:
 
         # Get all issues assigned to the user
         url = (self.url
-               + '/api/v4/issues?assignee_username='
+               + 'issues?assignee_username='
                + assignee
                + '&state=opened')
-        response = requests.get(url, headers={'PRIVATE-TOKEN': self.token})
+        print(url)
+        response = requests.get(url, headers={'PRIVATE-TOKEN': self.token}, verify=False)
         issues = response.json()
 
         return issues
