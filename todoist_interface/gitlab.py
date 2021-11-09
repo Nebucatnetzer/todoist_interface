@@ -18,8 +18,7 @@ class GitlabAPI:
         url = (self.url
                + 'issues?assignee_username='
                + assignee
-               + '&state=opened')
-        print(url)
+               + '&state=opened&scope=all')
         response = requests.get(url, headers={'PRIVATE-TOKEN': self.token}, verify=False)
         issues = response.json()
 
