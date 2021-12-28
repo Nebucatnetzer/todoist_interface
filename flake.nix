@@ -25,28 +25,34 @@
         devShell."${system}" = pkgs.mkShell {
           buildInputs = [ pyEnv ];
         };
-        packages = {
-          binary = pkgs.stdenv.mkDerivation rec {
-            name = "todoist_interface";
-            src = self;
-            buildInputs = [
-              pkgs.coreutils
-              pkgs.glibc
-              pkgs.bintools-unwrapped
-              pyEnv
-            ];
-            phases = [ "unpackPhase" "buildPhase" "installPhase" ];
-            buildPhase = ''
-              export PATH="${pkgs.lib.makeBinPath buildInputs}";
-              python -m pytest tests
-              pyinstaller -F todoist_interface/__main__.py -n todoist_interface
-            '';
-            installPhase = ''
-              mkdir -p $out
-              cp /build/source/dist/todoist_interface "$out/todoist_interface"
-            '';
-          };
-        };
-        defaultPackage = packages.binary;
+        packages =
+          let
+            binary = { autoPatchelfHook, ... }: pkgs.stdenv.mkDerivation rec {
+              name = "todoist_interface";
+              src = self;
+              nativeBuildInputs = [
+                autoPatchelfHook
+              ];
+              buildInputs = [
+                pkgs.coreutils
+                pkgs.glibc
+                pkgs.bintools-unwrapped
+                pyEnv
+              ];
+              phases = [ "unpackPhase" "buildPhase" "installPhase" ];
+              buildPhase = ''
+                export PATH="${pkgs.lib.makeBinPath buildInputs}";
+                python -m pytest tests
+                pyinstaller -F todoist_interface/__main__.py -n todoist_interface
+              '';
+              installPhase = ''
+                mkdir -p $out
+                cp /build/source/dist/todoist_interface "$out/todoist_interface"
+              '';
+            };
+          in
+          pkgs.callPackage binary { };
+
+        defaultPackage = packages;
       });
 }
