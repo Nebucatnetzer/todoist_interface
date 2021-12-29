@@ -1,21 +1,19 @@
 import json
 import requests
 
-from todoist_interface.gitlab import GitlabAPI
+from todoist_interface import gitlab
 import mocks
 
 
 def test_init():
-    gitlab = GitlabAPI("url", "token", "assignee")
-    assert (gitlab.url == "url"
-            and gitlab.token == "token"
-            and gitlab.assignee == "assignee")
+    api = gitlab.GitlabAPI("url", "token", "assignee")
+    assert (api.url == "url"
+            and api.token == "token"
+            and api.assignee == "assignee")
 
 
 def test_covert_to_todoist(example_issues):
-    gitlab = GitlabAPI("url", "token", "assignee")
     issues = json.loads(example_issues)
-
     tasks = gitlab.convert_to_todoist(issues)
     assert tasks == [
         {'content': '[Consequatur vero maxime deserunt laboriosam est voluptas dolorem.](http://gitlab.example.com/my-group/my-project/issues/6)',
@@ -29,7 +27,7 @@ def test_gitlab_get_tickets(monkeypatch, example_issues):
 
     # apply the monkeypatch for requests.get to mock_get
     monkeypatch.setattr(requests, "get", mock_get)
-    gitlab = GitlabAPI("url", "token", "assignee")
-    issues = gitlab.get_issues()
+    api = gitlab.GitlabAPI("url", "token", "assignee")
+    issues = api.get_issues()
     assert issues[0][
         'content'] == "[Consequatur vero maxime deserunt laboriosam est voluptas dolorem.](http://gitlab.example.com/my-group/my-project/issues/6)"

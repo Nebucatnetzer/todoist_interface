@@ -9,14 +9,14 @@ class TodoistAPI:
     def __init__(self, token: str):
         self.token = token
 
-    def get_get_tasks_by_filter(self, filter: str):
+    def get_get_tasks_by_filter(self, todoist_filter: str):
         """
         Returns all tasks from todoist
         """
         response = requests.get(
             self.url + 'tasks',
             headers={'Authorization': 'Bearer ' + self.token},
-            params={"filter": filter})
+            params={"filter": todoist_filter})
         return response.json()
 
     def create_tasks(self, tasks: list):

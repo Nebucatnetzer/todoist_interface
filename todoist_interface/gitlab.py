@@ -1,6 +1,15 @@
 import requests
 
 
+def convert_to_todoist(issues):
+    tasks = []
+    for issue in issues:
+        content = "[{title}]({url})".format(title=issue["title"],
+                                            url=issue["web_url"])
+        tasks.append({"content": content, "label_ids": [2158782094, ]})
+    return tasks
+
+
 class GitlabAPI:
     def __init__(self, url: str, token: str, assignee: str) -> None:
         self.url = url
@@ -24,14 +33,6 @@ class GitlabAPI:
 
         return issues
 
-    def convert_to_todoist(self, issues):
-        tasks = []
-        for issue in issues:
-            content = "[{title}]({url})".format(title=issue["title"],
-                                                url=issue["web_url"])
-            tasks.append({"content": content, "label_ids": [2158782094, ]})
-        return tasks
-
     def get_issues(self) -> list:
         issues = self.get_issues_by_assignee(self.assignee)
-        return self.convert_to_todoist(issues)
+        return convert_to_todoist(issues)
