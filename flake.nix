@@ -22,7 +22,7 @@
         };
       in
       rec {
-        devShell."${system}" = pkgs.mkShell {
+        devShells.default = pkgs.mkShell {
           buildInputs = [ pyEnv ];
         };
         packages =
