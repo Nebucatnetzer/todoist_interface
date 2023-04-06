@@ -44,7 +44,7 @@
               buildPhase = ''
                 export PATH="${pkgs.lib.makeBinPath buildInputs}";
                 python -m pytest tests
-                pyinstaller -F todoist_interface/__main__.py -n todoist_interface
+                pyinstaller -F todoist_interface/__main__.py -n todoist_interface --path=todoist_interface/
               '';
               installPhase = ''
                 mkdir -p $out
