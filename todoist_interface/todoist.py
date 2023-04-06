@@ -19,7 +19,7 @@ class TodoistAPI:
             params={"filter": todoist_filter})
         return response.json()
 
-    def create_tasks(self, tasks: list):
+    def create_tasks(self, tasks: list, labels: list):
         """
         Adds tasks to todoist
         """
@@ -32,5 +32,5 @@ class TodoistAPI:
                               + self.token},
                           data=json.dumps({
                               "content": task["content"],
-                              "label_ids": task["label_ids"]
+                              "labels": labels
                           }))
