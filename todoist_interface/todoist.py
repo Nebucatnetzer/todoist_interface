@@ -4,7 +4,7 @@ import uuid
 
 
 class TodoistAPI:
-    url = "https://api.todoist.com/rest/v1/"
+    url = "https://api.todoist.com/rest/v2/"
 
     def __init__(self, token: str):
         self.token = token
