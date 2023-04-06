@@ -224,4 +224,5 @@ flycheck_*.el
 # todoist_interface
 todoist_interface.yml
 dig_apis.py
+/.direnv/
 /result
