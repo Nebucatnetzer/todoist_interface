@@ -47,7 +47,7 @@
               '';
               installPhase = ''
                 mkdir -p $out
-                cp /build/source/dist/todoist_interface "$out/todoist_interface"
+                cp dist/todoist_interface "$out/todoist_interface"
               '';
             };
           in
