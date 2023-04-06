@@ -15,6 +15,7 @@
           requirements = base-requirements + ''
             autopep8
             flake8
+            black
             pytest
             pytest-cov
             pyinstaller
