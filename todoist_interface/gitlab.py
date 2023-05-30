@@ -37,7 +37,7 @@ class GitlabAPI:
             + "&state=opened&scope=all"
         )
         response = requests.get(
-            url, headers={"PRIVATE-TOKEN": self.token}, verify=False
+            url, headers={"PRIVATE-TOKEN": self.token}
         )
         issues = response.json()
 
