@@ -1,72 +1,77 @@
 {
   description = "A Python API for various tools I use at work.";
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
     flake-utils.url = "github:numtide/flake-utils";
-    mach-nix.url = "github:DavHau/mach-nix";
+    poetry2nix.url = "github:nix-community/poetry2nix";
   };
-
   outputs =
     {
       self,
       nixpkgs,
       flake-utils,
-      mach-nix,
-    }:
-    with flake-utils.lib;
-    eachSystem allSystems (
+      poetry2nix,
+    }@inputs:
+    flake-utils.lib.eachDefaultSystem (
       system:
       let
-        pkgs = nixpkgs.legacyPackages.${system};
-        base-requirements = builtins.readFile ./requirements/base.txt;
-        pyEnv = mach-nix.lib."${system}".mkPython {
-          requirements =
-            base-requirements
-            + ''
-              autopep8
-              flake8
-              black
-              pytest
-              pytest-cov
-              pyinstaller
-            '';
+        pkgs = inputs.nixpkgs.legacyPackages.${system};
+        poetry2nix = inputs.poetry2nix.lib.mkPoetry2Nix { inherit pkgs; };
+        python = pkgs.python311;
+        pyEnv = poetry2nix.mkPoetryEnv {
+          projectDir = ./.;
+          editablePackageSources = {
+            todoist_interface = ./todoist_interface;
+          };
+          overrides = poetry2nix.defaultPoetryOverrides.extend (
+            self: super: {
+              pyinstaller = super.pyinstaller.overridePythonAttrs (oldAttrs: {
+                propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ pkgs.zlib ];
+              });
+            }
+          );
+          inherit python;
         };
+        binary =
+          {
+            bintools-unwrapped,
+            coreutils,
+            glibc,
+          }:
+          pkgs.stdenv.mkDerivation {
+            name = "todoist_interface";
+            src = self;
+            buildInputs = [
+              coreutils
+              glibc
+              bintools-unwrapped
+              pyEnv
+            ];
+            doCheck = true;
+            checkPhase = ''
+              python -m pytest tests
+            '';
+            buildPhase = ''
+              pyinstaller -F todoist_interface/__main__.py -n todoist_interface --path=todoist_interface/
+            '';
+            installPhase = ''
+              mkdir -p $out
+              cp dist/todoist_interface "$out/todoist_interface"
+            '';
+          };
       in
-      rec {
-        devShells.default = pkgs.mkShell { buildInputs = [ pyEnv ]; };
-        packages =
-          let
-            binary =
-              { autoPatchelfHook, ... }:
-              pkgs.stdenv.mkDerivation rec {
-                name = "todoist_interface";
-                src = self;
-                nativeBuildInputs = [ autoPatchelfHook ];
-                buildInputs = [
-                  pkgs.coreutils
-                  pkgs.glibc
-                  pkgs.bintools-unwrapped
-                  pyEnv
-                ];
-                phases = [
-                  "unpackPhase"
-                  "buildPhase"
-                  "installPhase"
-                ];
-                buildPhase = ''
-                  export PATH="${pkgs.lib.makeBinPath buildInputs}";
-                  python -m pytest tests
-                  pyinstaller -F todoist_interface/__main__.py -n todoist_interface --path=todoist_interface/
-                '';
-                installPhase = ''
-                  mkdir -p $out
-                  cp dist/todoist_interface "$out/todoist_interface"
-                '';
-              };
-          in
-          pkgs.callPackage binary { };
-
-        defaultPackage = packages;
+      {
+        devShells.default = pkgs.mkShell {
+          shellHook = ''
+            export PYTHONPATH="$PYTHONPATH":"$PWD"/todoist_interface
+          '';
+          buildInputs = [
+            pyEnv
+            pkgs.poetry
+          ];
+        };
+        packages.binary = pkgs.callPackage binary { };
+        packages.default = self.packages.${system}.binary;
       }
     );
 }
