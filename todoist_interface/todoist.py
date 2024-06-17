@@ -9,7 +9,7 @@ class TodoistAPI:
     def __init__(self, token: str):
         self.token = token
 
-    def get_get_tasks_by_filter(self, todoist_filter: str):
+    def get_get_tasks_by_filter(self, todoist_filter: str) -> list:
         """
         Returns all tasks from todoist
         """
@@ -20,7 +20,7 @@ class TodoistAPI:
         )
         return response.json()
 
-    def create_tasks(self, tasks: list, labels: list):
+    def create_tasks(self, tasks: list, labels: list) -> None:
         """
         Adds tasks to todoist
         """

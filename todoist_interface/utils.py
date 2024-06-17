@@ -1,4 +1,4 @@
-def get_missing_tasks(tasks, issues_to_check):
+def get_missing_tasks(tasks: list, issues_to_check: list) -> list:
     """
     Check if tasks exists in tasks_to_check
     :param tasks: list of tasks
