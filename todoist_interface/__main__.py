@@ -2,12 +2,12 @@
 
 import sys
 
+import mantishub
 import settings
 import utils
 
 from todoist import TodoistAPI
 from gitlab import GitlabAPI
-from mantishub import MantishubAPI
 
 
 if __name__ == "__main__":
@@ -41,9 +41,8 @@ if __name__ == "__main__":
     mantis_labeled_tasks = []
     mantishub_tasks = []
     if "mantishub" in config:
-        mantishub = MantishubAPI(config["mantishub"]["token"])
         # Get the Mantishub tasks
-        mantishub_tasks = mantishub.get_tickets()
+        mantishub_tasks = mantishub.get_tickets(token=config["mantishub"]["token"])
         # Get the Todoist tasks labeled mantishub
         mantis_labeled_tasks = todoist.get_get_tasks_by_filter("@mantis")
         if mantis_labeled_tasks:
