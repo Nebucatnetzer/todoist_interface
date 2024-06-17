@@ -2,6 +2,8 @@
 
 import requests
 
+from requests.exceptions import HTTPError
+
 
 def convert_to_todoist(issues: list) -> list:
     tasks = []
@@ -41,9 +43,16 @@ class GitlabAPI:
             + "&state=opened&scope=all"
         )
         response = requests.get(url, headers={"PRIVATE-TOKEN": self.token}, timeout=5)
-        issues = response.json()
+        content = response.json()
+        if response.status_code != 200:
+            if content["error"]:
+                raise HTTPError(
+                    "\nFailed to get issues from Gitlab:\n",
+                    f"{content['error']}\n",
+                    f"{content['error_description']}",
+                )
 
-        return issues
+        return content
 
     def get_issues(self) -> list:
         issues = self.get_issues_by_assignee(self.assignee)
