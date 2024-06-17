@@ -40,9 +40,7 @@ class GitlabAPI:
             + assignee
             + "&state=opened&scope=all"
         )
-        response = requests.get(
-            url, headers={"PRIVATE-TOKEN": self.token}
-        )
+        response = requests.get(url, headers={"PRIVATE-TOKEN": self.token}, timeout=5)
         issues = response.json()
 
         return issues
