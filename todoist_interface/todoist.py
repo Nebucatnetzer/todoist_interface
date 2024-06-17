@@ -1,6 +1,7 @@
-import requests
 import json
 import uuid
+
+import requests
 
 
 class TodoistAPI:
