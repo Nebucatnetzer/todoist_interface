@@ -1,3 +1,5 @@
+"""A class to retrieve and create tasks in Todoist."""
+
 import json
 import uuid
 
