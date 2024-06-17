@@ -1,3 +1,5 @@
+"""Get issues from Gitlab API and convert them to Todoist tasks."""
+
 import requests
 
 
