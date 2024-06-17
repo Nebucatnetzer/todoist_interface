@@ -6,7 +6,9 @@ import requests
 def convert_to_todoist(issues: list) -> list:
     tasks = []
     for issue in issues:
-        content = "[{title}]({url})".format(title=issue["title"], url=issue["web_url"])
+        title = issue["title"]
+        url = issue["web_url"]
+        content = f"[{title}]({url})"
         tasks.append(
             {
                 "content": content,
