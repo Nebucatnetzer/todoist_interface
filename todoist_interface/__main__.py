@@ -3,10 +3,12 @@
 import sys
 
 import settings
+import utils
+
 from todoist import TodoistAPI
 from gitlab import GitlabAPI
 from mantishub import MantishubAPI
-import utils
+
 
 if __name__ == "__main__":
     # initialise the settings
