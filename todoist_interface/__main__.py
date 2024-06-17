@@ -50,11 +50,13 @@ if __name__ == "__main__":
             tasks.extend(mantis_labeled_tasks)
 
     # Check if there are any tasks to add to Todoist
+    missing_gitlab_tasks = []
     if gitlab_tasks:
-        missing_gitlab_tasks = utils.get_missing_tasks(tasks, gitlab_tasks)
+        missing_gitlab_tasks.extend(utils.get_missing_tasks(tasks, gitlab_tasks))
 
+    missing_mantis_tasks = []
     if mantishub_tasks:
-        missing_mantis_tasks = utils.get_missing_tasks(tasks, mantishub_tasks)
+        missing_mantis_tasks.extend(utils.get_missing_tasks(tasks, mantishub_tasks))
 
     if missing_gitlab_tasks or missing_mantis_tasks:
         if missing_gitlab_tasks:
