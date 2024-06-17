@@ -1,8 +1,9 @@
 import json
 import requests
 
-from todoist_interface import gitlab
 import mocks
+
+from todoist_interface import gitlab
 
 
 def test_init():
