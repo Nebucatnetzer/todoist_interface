@@ -1,5 +1,7 @@
 """Collects tasks from Gitlab and Mantishub and adds them to Todoist."""
 
+import sys
+
 import settings
 from todoist import TodoistAPI
 from gitlab import GitlabAPI
@@ -67,5 +69,5 @@ if __name__ == "__main__":
                     "mantis",
                 ],
             )
-        exit(0)
+        sys.exit(0)
     print("Nothing new to add.")
