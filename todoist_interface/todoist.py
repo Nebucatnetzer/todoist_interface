@@ -20,6 +20,7 @@ class TodoistAPI:
             self.url + "tasks",
             headers={"Authorization": "Bearer " + self.token},
             params={"filter": todoist_filter},
+            timeout=5,
         )
         return response.json()
 
@@ -36,4 +37,5 @@ class TodoistAPI:
                     "Authorization": "Bearer " + self.token,
                 },
                 data=json.dumps({"content": task["content"], "labels": labels}),
+                timeout=5,
             )
