@@ -1,3 +1,5 @@
+"""Collects tasks from Gitlab and Mantishub and adds them to Todoist."""
+
 import settings
 from todoist import TodoistAPI
 from gitlab import GitlabAPI
