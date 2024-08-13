@@ -18,18 +18,7 @@ disable = [
 ]
 
 [tool.mypy]
-exclude = [
-    "tests/",
-]
-mypy_path = "./todoist_interface"
-# Start off with these
-warn_unused_configs = true
-warn_redundant_casts = true
-warn_unused_ignores = true
-
-# Getting these passing should be easy
-strict_equality = true
-strict_concatenate = true
+strict = true
 
 [tool.poetry.dependencies]
 python = ">=3.11,<3.13"
