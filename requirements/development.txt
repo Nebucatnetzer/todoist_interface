@@ -1,7 +1,0 @@
- -r base.txt
-
-flake8
-autopep8
-pytest
-pytest-cov
-pyinstaller==5.11
