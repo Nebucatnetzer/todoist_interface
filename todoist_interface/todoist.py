@@ -9,7 +9,7 @@ import requests
 class TodoistAPI:
     url = "https://api.todoist.com/rest/v2/"
 
-    def __init__(self, token: str):
+    def __init__(self, token: str) -> None:
         self.token = token
 
     def get_get_tasks_by_filter(self, todoist_filter: str) -> list:
