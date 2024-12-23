@@ -33,6 +33,7 @@ pyinstaller = "^6.8.0"
 python-lsp-server = "^1.11.0"
 pylint = "^3.2.3"
 mypy = "^1.10.0"
+types-requests = "^2.32.0.20241016"
 
 [build-system]
 requires = ["poetry-core"]
