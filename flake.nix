@@ -6,12 +6,7 @@
     poetry2nix.url = "github:nix-community/poetry2nix";
   };
   outputs =
-    {
-      self,
-      nixpkgs,
-      flake-utils,
-      poetry2nix,
-    }@inputs:
+    { self, flake-utils, ... }@inputs:
     flake-utils.lib.eachDefaultSystem (
       system:
       let
