@@ -1,9 +1,10 @@
 {
   description = "A Python API for various tools I use at work.";
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
     flake-utils.url = "github:numtide/flake-utils";
     poetry2nix.url = "github:nix-community/poetry2nix";
+    poetry2nix.inputs.nixpkgs.follows = "nixpkgs";
   };
   outputs =
     { self, flake-utils, ... }@inputs:
@@ -12,7 +13,18 @@
       let
         pkgs = inputs.nixpkgs.legacyPackages.${system};
         poetry2nix = inputs.poetry2nix.lib.mkPoetry2Nix { inherit pkgs; };
-        python = pkgs.python311;
+        python = pkgs.python311.override {
+          self = python;
+          packageOverrides = final: prev: {
+            wheel = prev.wheel.overridePythonAttrs (oA: rec {
+              version = "0.45.1";
+              src = oA.src.override (oA: {
+                rev = "refs/tags/${version}";
+                hash = "sha256-tgueGEWByS5owdA5rhXGn3qh1Vtf0HGYC6+BHfrnGAs=";
+              });
+            });
+          };
+        };
         pyEnv = poetry2nix.mkPoetryEnv {
           projectDir = ./.;
           editablePackageSources = {
@@ -22,6 +34,9 @@
             self: super: {
               pyinstaller = super.pyinstaller.overridePythonAttrs (oldAttrs: {
                 propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ pkgs.zlib ];
+              });
+              click = super.click.overridePythonAttrs (oldAttrs: {
+                propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ super.flit-core ];
               });
             }
           );
