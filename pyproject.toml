@@ -34,6 +34,7 @@ python-lsp-server = "^1.11.0"
 pylint = "^3.2.3"
 mypy = "^1.10.0"
 types-requests = "^2.32.0.20241016"
+types-pyyaml = "^6.0.12.20241221"
 
 [build-system]
 requires = ["poetry-core"]
